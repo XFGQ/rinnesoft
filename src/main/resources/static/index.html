@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rinnesoft — Furkan & Alper</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            /* PROJE KARTLARI - RESİMDEKİ TASARIM */
+            .projects-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }
+
+            .project-card {
+                background: #151515; /* Resimdeki çok koyu siyah arka plan */
+                border: 1px solid #2d2d2d; /* İnce, zarif gri kenarlık */
+                border-radius: 12px;
+                padding: 2rem; /* Resimdeki gibi geniş iç boşluk */
+                display: flex;
+                flex-direction: column;
+            }
+
+            .project-card h3 {
+                font-size: 1.4rem;
+                color: #f1f5f9;
+                margin-bottom: 0.4rem;
+                font-weight: 600;
+            }
+
+            .project-card .tech-stack {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.85rem;
+                color: #718096; /* Resimdeki role rengi (hafif soluk) */
+                margin-bottom: 1.5rem;
+            }
+
+            .project-card .desc,
+            .project-card .detail {
+                color: #94a3b8;
+                font-size: 1rem;
+                line-height: 1.6;
+                /* Uzun linklerin kartın dışına taşmasını engeller */
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+            .project-card .detail {
+                margin-top: 10px;
+                margin-bottom: 1.5rem;
+            }
+            .project-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+            }
+            .tech-logo {
+                width: 32px;
+                height: 32px;
+                filter: grayscale(1) brightness(1.5); /* Logoyu temanla uyumlu yapar */
+                transition: 0.3s;
+            }
+
+            .project-card:hover .tech-logo {
+                filter: grayscale(0); /* Üstüne gelince logo renklenir */
+                transform: scale(1.1);
+            }
+            .project-links {
+                margin-top: auto; /* Butonları hep en alta iter */
+                display: flex;
+                gap: 10px;
+                padding-top: 15px;
+            }
+
+            /* Resimdeki altta duran şık siyah butonlar */
+            .project-link-btn {
+                background: transparent;
+                border: 1px solid #333;
+                color: #888;
+                padding: 6px 16px;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-family: "JetBrains Mono", monospace;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+
+            .project-link-btn:hover {
+                background: #222;
+                color: #e2e8f0;
+                border-color: #555;
+            }
+
+            /* ZORBO İÇİN ÖZEL YATAY KART */
+            .project-card.featured {
+                grid-column: 1 / -1; /* Bütün satırı kaplar (Yatay olur) */
+            }
+
+            .featured-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .link-top-right {
+                background: rgba(59, 130, 246, 0.1);
+                color: #60a5fa;
+                border: 1px solid rgba(59, 130, 246, 0.3);
+                padding: 8px 16px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: 0.2s;
+            }
+
+            .link-top-right:hover {
+                background: rgba(59, 130, 246, 0.2);
+            }
+
+            /* Navbar Ortalama */
+            .navbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .nav-links {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+            }
+            .nav-actions {
+                margin-left: auto;
+            }
+
+            /* YEPYENİ ABOUT US KART TASARIMI */
+            .two-col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+            @media (max-width: 850px) {
+                .two-col {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .about-card {
+                padding: 2.5rem;
+                position: relative;
+                overflow: hidden;
+                background: var(--bg-alt);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+            /* Kartların üstündeki havalı renkli çizgi */
+            .about-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary), #3b82f6);
+            }
+
+            .card-head {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .card-head h3 {
+                font-size: 1.8rem;
+                margin-bottom: 5px;
+            }
+            .card-head .role {
+                font-size: 1rem;
+                color: var(--accent);
+                background: rgba(59, 130, 246, 0.1);
+                padding: 5px 10px;
+                border-radius: 6px;
+                display: inline-block;
+            }
+            .profile-img {
+                width: 110px;
+                height: 110px;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                background-color: #2d3748;
+                transform: rotate(-3deg);
+                transition: 0.3s;
+            }
+            .about-card:hover .profile-img {
+                transform: rotate(0deg) scale(1.05);
+            }
+
+            /* İkonlu İstatistik/Bilgi Izgarası */
+            .about-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin: 20px 0;
+                padding: 15px;
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.03);
+            }
+            .stat-item {
+                display: flex;
+                flex-direction: column; /* İkon olmadığı için alt alta daha şık durur */
+                gap: 4px;
+            }
+            .stat-icon {
+                display: none;
+            } /* İkonları tamamen gizliyoruz */
+            .stat-text {
+                display: flex;
+                flex-direction: column;
+            }
+            .stat-text span {
+                font-size: 0.7rem;
+                color: #64748b; /* Başlık rengini biraz daha yumuşattık */
+                text-transform: uppercase;
+            }
+            .stat-text strong {
+                font-size: 0.9rem;
+                color: #f1f5f9;
+            }
+            .about-text {
+                font-size: 1.05rem;
+                line-height: 1.7;
+                margin-top: 20px;
+                color: #cbd5e1;
+            }
+
+            .btn-small {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.95rem;
+                border-radius: 6px;
+                background-color: var(--primary);
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn-small:hover {
+                background-color: #2b6cb0;
+                transform: translateY(-2px);
+            }
+
+            /* Proje Kartları İçin Etiketler (Sadece Team/Personal) */
+            .project-badge {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 6px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 12px;
+            }
+            .badge-team {
+                background: rgba(59, 130, 246, 0.15);
+                color: #60a5fa;
+                border: 1px solid rgba(59, 130, 246, 0.3);
+            }
+            .badge-personal {
+                background: rgba(16, 185, 129, 0.15);
+                color: #34d399;
+                border: 1px solid rgba(16, 185, 129, 0.3);
+            }
+
+            /* Sosyal Link Butonları */
+            .social-btn {
+                padding: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 6px;
+                color: #fff;
+                text-decoration: none;
+                transition: 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .social-btn:hover {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateY(-2px);
+            }
+            /* İkon bulunamazsa devreye girecek şık metin tasarımı */
+            .fallback-icon {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.85rem;
+                color: #e2e8f0;
+                background: #334155; /* Modern bir koyu mavi/gri */
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar" id="navbar">
+            <a href="#home" class="nav-logo">RinneSoft</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button
+                    class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="Toggle theme"
+                >
+                    ☀
+                </button>
+            </div>
+        </nav>
+
+        <section class="hero" id="home">
+            <div class="container">
+                <p class="hero-label">
+                    Software Developers - We love coding, developing, innovation
+                </p>
+                <h1>Furkan &amp; Alper</h1>
+                <p class="hero-sub">
+                    Two software engineering students building real projects —
+                    games, servers, tools, and systems.
+                </p>
+                <div class="btn-row">
+                    <a href="#projects" class="btn-primary">See Projects</a>
+                    <a href="#contact" class="btn-ghost">Contact Us</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <div class="container">
+                <h2>About Us</h2>
+                <div class="two-col" id="aboutGrid">
+                    <div class="card about-card">
+                        <div class="card-head">
+                            <img
+                                src="/api/photos/furkan"
+                                alt="Furkan Duman"
+                                class="profile-img"
+                            />
+                            <div>
+                                <h3>Furkan Duman</h3>
+                                <span class="role"
+                                    >Backend - Game Dev - DevOps</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>University</span
+                                    ><strong id="uni-display-furkan"
+                                        >Loading...</strong
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Faculty</span
+                                    ><strong id="fac-display-furkan"
+                                        >Loading...</strong
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Born</span><strong>2003</strong>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Level</span
+                                    ><strong>Junior (3rd Year)</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="about-text" id="bio-display-furkan">
+                            Loading bio...
+                        </p>
+
+                        <div
+                            class="link-row"
+                            style="
+                                margin-top: 25px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            "
+                        >
+                            <a
+                                href="/api/cv/furkan"
+                                class="cv-download-btn"
+                                download
+                            >
+                                <i class="fas fa-file-pdf"></i> Download CV
+                            </a>
+                            <a
+                                id="gh-about-furkan"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="social-btn"
+                                >GitHub</a
+                            >
+                            <a
+                                id="li-about-furkan"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="social-btn"
+                                >LinkedIn</a
+                            >
+                        </div>
+                    </div>
+
+                    <div class="card about-card">
+                        <div class="card-head">
+                            <img
+                                src="/api/photos/alper"
+                                alt="Alper Altınpınar"
+                                class="profile-img"
+                            />
+                            <div>
+                                <h3>Alper Altınpınar</h3>
+                                <span class="role"
+                                    >Full Stack - Game Dev - DevOps</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>University</span
+                                    ><strong id="uni-display-alper"
+                                        >Loading...</strong
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Faculty</span
+                                    ><strong id="fac-display-alper"
+                                        >Loading...</strong
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Born</span><strong>2003</strong>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-text">
+                                    <span>Level</span
+                                    ><strong>Junior (3rd Year)</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="about-text" id="bio-display-alper">
+                            Loading bio...
+                        </p>
+
+                        <div
+                            class="link-row"
+                            style="
+                                margin-top: 25px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            "
+                        >
+                            <a
+                                href="/api/cv/alper"
+                                class="cv-download-btn"
+                                download
+                            >
+                                <i class="fas fa-file-pdf"></i> Download CV
+                            </a>
+                            <a
+                                id="gh-about-alper"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="social-btn"
+                                >GitHub</a
+                            >
+                            <a
+                                id="li-about-alper"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="social-btn"
+                                >LinkedIn</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section section-alt" id="projects">
+            <div class="container">
+                <h2>Projects</h2>
+
+                <div class="tab-row" style="margin-bottom: 2rem">
+                    <button class="tab active" data-filter="all">All</button>
+                    <button class="tab" data-filter="team">Team</button>
+                    <button class="tab" data-filter="personal">Personal</button>
+                </div>
+
+                <div class="projects-grid" id="projectsGrid">
+                    <div class="project-card featured" data-category="team">
+                        <div class="featured-header">
+                            <div>
+                                <h3>Zorbo - 2D Steam Game</h3>
+                                <div class="tech-stack">
+                                    Unity · C# · Steamworks
+                                </div>
+                            </div>
+                            <a
+                                href="https://store.steampowered.com/app/4513360/Zorbo/"
+                                target="_blank"
+                                rel="noopener"
+                                class="link-top-right"
+                                >Steam Link ↗</a
+                            >
+                        </div>
+                        <p class="desc">
+                            A 2D basic game developed in Unity. We recently
+                            finished the development and released our first demo
+                            on Steam!
+                        </p>
+                        <p class="detail">
+                            Zorbo is our proudest game project. We built it from
+                            scratch using the Unity Engine. To support our
+                            development and host our services, we bought a real
+                            Rack Server and set it up in our home in Izmir,
+                            Turkey. We handled the complete server setup,
+                            including Linux installation, Docker containers, and
+                            even the room temperature control.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="skills">
+            <div class="container">
+                <h2>Skills &amp; Technologies</h2>
+                <div class="skills-grid" id="skillsGrid">
+                    <div class="skill-group">
+                        <h4>Languages</h4>
+                        <div class="pills">
+                            <span>Java</span><span>C++</span><span>C</span
+                            ><span>C#</span><span>Python</span
+                            ><span>JavaScript</span><span>Bash</span
+                            ><span>SQL</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>Game Development</h4>
+                        <div class="pills">
+                            <span>Unity</span><span>C# Scripting</span
+                            ><span>Mirror Networking</span><span>2D Games</span
+                            ><span>Java Swing Games</span><span>QML</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>Backend &amp; Networking</h4>
+                        <div class="pills">
+                            <span>Java Sockets</span><span>Spring Boot</span
+                            ><span>.NET</span><span>REST APIs</span
+                            ><span>TCP/IP</span><span>WebSockets</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>Linux &amp; DevOps</h4>
+                        <div class="pills">
+                            <span>Linux</span><span>Docker</span
+                            ><span>Docker Compose</span><span>Nginx</span
+                            ><span>systemd</span><span>SSH</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>Infrastructure</h4>
+                        <div class="pills">
+                            <span>Self-Hosting</span><span>Rack Servers</span
+                            ><span>Firewalls</span><span>SSL / TLS</span
+                            ><span>Reverse Proxy</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>Tools</h4>
+                        <div class="pills">
+                            <span>Git</span><span>GitHub</span
+                            ><span>Android Dev</span><span>CMake</span
+                            ><span>Maven</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-alt" id="contact">
+            <div class="container">
+                <h2>Contact</h2>
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="contact-person" style="margin-bottom: 30px">
+                            <h4>Furkan Duman</h4>
+                            <a
+                                id="contact-email-furkan"
+                                href="#"
+                                class="contact-row"
+                                >✉ Loading...</a
+                            >
+                            <a
+                                id="contact-gh-furkan"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="contact-row"
+                                >🔗 GitHub</a
+                            >
+                            <a
+                                id="contact-li-furkan"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="contact-row"
+                                >🔗 LinkedIn</a
+                            >
+                        </div>
+                        <div class="contact-person">
+                            <h4>Alper Altınpınar</h4>
+                            <a
+                                id="contact-email-alper"
+                                href="#"
+                                class="contact-row"
+                                >✉ Loading...</a
+                            >
+                            <a
+                                id="contact-gh-alper"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="contact-row"
+                                >🔗 GitHub</a
+                            >
+                            <a
+                                id="contact-li-alper"
+                                href="#"
+                                target="_blank"
+                                rel="noopener"
+                                class="contact-row"
+                                >🔗 LinkedIn</a
+                            >
+                        </div>
+                    </div>
+                    <form class="contact-form" id="contactForm" novalidate>
+                        <div class="form-group">
+                            <label for="fname">Name</label>
+                            <input
+                                type="text"
+                                id="fname"
+                                placeholder="Your name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="femail">Email</label>
+                            <input
+                                type="email"
+                                id="femail"
+                                placeholder="your@email.com"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="fmsg">Message</label>
+                            <textarea
+                                id="fmsg"
+                                rows="5"
+                                placeholder="What's on your mind?"
+                                required
+                            ></textarea>
+                        </div>
+                        <button
+                            type="submit"
+                            class="btn-primary"
+                            id="submitBtn"
+                        >
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container footer-inner">
+                <span class="footer-logo">Rinnesoft</span>
+                <span
+                    >© 2026 Furkan Duman &amp; Alper Altınpınar ·
+                    rinnesoft.com</span
+                >
+                <span class="footer-logo">Rinnesoft</span>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+        <script>
+            async function fetchBios() {
+                try {
+                    const res = await fetch("/api/profiles");
+                    if (res.ok) {
+                        const profiles = await res.json();
+                        profiles.forEach((p) => {
+                            const isFurkan = p.name.includes("Furkan");
+                            const prefix = isFurkan ? "furkan" : "alper";
+
+                            document.getElementById(
+                                `bio-display-${prefix}`,
+                            ).textContent = p.bio || "No bio added yet.";
+                            document.getElementById(
+                                `uni-display-${prefix}`,
+                            ).textContent = p.university || "N/A";
+                            document.getElementById(
+                                `fac-display-${prefix}`,
+                            ).textContent = p.faculty || "N/A";
+                            document.getElementById(`gh-about-${prefix}`).href =
+                                p.githubUrl || "#";
+                            document.getElementById(`li-about-${prefix}`).href =
+                                p.linkedinUrl || "#";
+
+                            if (p.email) {
+                                document.getElementById(
+                                    `contact-email-${prefix}`,
+                                ).textContent = `✉ ${p.email}`;
+                                document.getElementById(
+                                    `contact-email-${prefix}`,
+                                ).href = `mailto:${p.email}`;
+                            }
+                            if (p.githubUrl)
+                                document.getElementById(
+                                    `contact-gh-${prefix}`,
+                                ).href = p.githubUrl;
+                            if (p.linkedinUrl)
+                                document.getElementById(
+                                    `contact-li-${prefix}`,
+                                ).href = p.linkedinUrl;
+                        });
+                    }
+                } catch (e) {
+                    console.error("Failed to load bios.");
+                }
+            }
+            fetchBios();
+        </script>
+    </body>
+</html>
