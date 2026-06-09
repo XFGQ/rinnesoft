@@ -400,27 +400,38 @@
             if (sessionStorage.getItem("rs-admin") === "1") showAdmin();
 
             async function checkPassword() {
-                const user = document.getElementById("pwInput").value;
-                const authHeader = "Basic " + btoa("admin:" + user);
+                const pw = document.getElementById("pwInput").value;
+                const msg = document.getElementById("pwMessage");
+                if (!pw) {
+                    msg.style.color = "#ff4d4d";
+                    msg.textContent = "Please enter a password.";
+                    msg.style.display = "block";
+                    return;
+                }
+                const authHeader = "Basic " + btoa("admin:" + pw);
+                msg.style.color = "#aaa";
+                msg.textContent = "Checking...";
+                msg.style.display = "block";
 
                 try {
-                    const res = await fetch("/api/projects", {
+                    const res = await fetch("/api/admin/ping", {
                         headers: { Authorization: authHeader },
                     });
-                    const msg = document.getElementById("pwMessage");
                     if (res.ok) {
                         msg.style.color = "#4BB543";
                         msg.textContent = "Login successful!";
-                        msg.style.display = "block";
                         localStorage.setItem("rs_auth", authHeader);
                         setTimeout(() => showAdmin(), 800);
-                    } else {
+                    } else if (res.status === 401 || res.status === 403) {
                         msg.style.color = "#ff4d4d";
                         msg.textContent = "Incorrect password.";
-                        msg.style.display = "block";
+                    } else {
+                        msg.style.color = "#ff4d4d";
+                        msg.textContent = "Server error: " + res.status;
                     }
                 } catch (e) {
-                    alert("Could not connect to server.");
+                    msg.style.color = "#ff4d4d";
+                    msg.textContent = "Could not connect to server. Is it running?";
                 }
             }
 
