@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +19,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // DelegatingPasswordEncoder kullanıyoruz, prefix'e göre otomatik algılar.
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -28,12 +29,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth ->
                 auth
-                    // 1. HATA SAYFALARI (Şifre sorununun %100 çözümü burasıdır)
+                    // 1. HATA SAYFALARI
                     .dispatcherTypeMatchers(DispatcherType.ERROR)
                     .permitAll()
                     .requestMatchers("/error")
                     .permitAll()
-                    // 2. STATİK DOSYALAR (Ana sayfa, CSS, resimler vb.)
+                    // 2. STATİK DOSYALAR
                     .requestMatchers(
                         "/",
                         "/index.html",
@@ -68,9 +69,9 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
             .username("admin")
-            .password(
-                "$2a$12$/Q5tgpWbJzXF4gAEtPH4AujUUZXl/dPL8.8JlQtEEqXvUK6F.8XGa"
-            )
+            // ŞİFRENİ BURAYA YAZACAKSIN. Başındaki {sha256} kısmını SİLME.
+            // Örnek hash "123456" şifresine aittir. Kendi hash'ini oluşturup değiştir.
+            .password("{noop}d7adb9f23716c7860223d4db329884b6f8bee0e73fb1ce25ceacfc3f27fdb2ea")
             .roles("ADMIN")
             .build();
         return new InMemoryUserDetailsManager(admin);

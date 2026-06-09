@@ -1,0 +1,9 @@
+target/
+uploads/
+.env
+*.env
+application-prod.properties
+.idea/
+*.iml
+*.log
+logs/
