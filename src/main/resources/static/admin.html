@@ -32,16 +32,14 @@
                         Login
                     </button>
                     <p
-                        class="admin-error"
-                        id="pwError"
+                        id="pwMessage"
                         style="
                             display: none;
                             text-align: center;
                             margin-top: 10px;
+                            font-weight: 500;
                         "
-                    >
-                        Incorrect password.
-                    </p>
+                    ></p>
                 </div>
             </div>
         </div>
@@ -409,13 +407,17 @@
                     const res = await fetch("/api/projects", {
                         headers: { Authorization: authHeader },
                     });
+                    const msg = document.getElementById("pwMessage");
                     if (res.ok) {
+                        msg.style.color = "#4BB543";
+                        msg.textContent = "Login successful!";
+                        msg.style.display = "block";
                         localStorage.setItem("rs_auth", authHeader);
-                        showAdmin();
+                        setTimeout(() => showAdmin(), 800);
                     } else {
-                        document
-                            .getElementById("pwError")
-                            .classList.add("show");
+                        msg.style.color = "#ff4d4d";
+                        msg.textContent = "Incorrect password.";
+                        msg.style.display = "block";
                     }
                 } catch (e) {
                     alert("Could not connect to server.");
