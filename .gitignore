@@ -8,3 +8,4 @@ application-prod.properties
 *.log
 logs/
 src/main/resources/application-local.properties
+application-local.properties
