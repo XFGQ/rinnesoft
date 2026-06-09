@@ -1,6 +1,7 @@
 package com.example.rinnesoft.config;
 
 import jakarta.servlet.DispatcherType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${admin.password}")
+    private String adminPassword;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -69,9 +73,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
             .username("admin")
-            // ŞİFRENİ BURAYA YAZACAKSIN. Başındaki {sha256} kısmını SİLME.
-            // Örnek hash "123456" şifresine aittir. Kendi hash'ini oluşturup değiştir.
-            .password("{noop}d7adb9f23716c7860223d4db329884b6f8bee0e73fb1ce25ceacfc3f27fdb2ea")
+            .password("{noop}" + adminPassword)
             .roles("ADMIN")
             .build();
         return new InMemoryUserDetailsManager(admin);
